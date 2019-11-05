@@ -1,0 +1,136 @@
+git使用学习
+
+#创建reposity
+git init
+#添加文件可添加多个
+git add a.txt 
+
+#添加改动记录
+git commit -m <message>
+#仓库当前状态
+git status
+#查看修改内容
+git diff
+#查看提交日志
+git log
+#版本回退
+git reset --hard id
+
+#记录命令
+git reflog
+
+#git 里面有个暂存区，git add 的文件会暂时存储在这个文件夹上面使用了git commit才会提交到工作区，注意git管理的是修改而不是文件哈！！！！
+
+#git查看工作区和版本库的区别
+git diff HEAD -- readme.txt
+
+#tips：每一次修改后最好是add ->修改->add->commit
+
+#如果你在改了某一次的时候发现有问题，就可以使用回退功能
+#回退包括 未add回退（未放到暂存区） 撤销内容与版本库一样
+#已ADD回退 （放到了暂存区） 撤销后的内容与暂存区一样
+git restore <file>...
+
+#git reset能够版本回退，也能够将暂存区内容撤销,如果你已经提交了，就step1、撤销暂存区内容 step2、使用 git restore 将工作区与版本区内容同步
+git reset HEAD <file>
+
+##########删除,现在工作区文件（已经commit过的） 被rm掉了
+#1、确实想删除,
+git rm
+#git restore其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+#2、还原工作区文件
+git restore
+
+#将本地的推送到Github,本地关联到github,创建完github repository后将本地仓库与github关联
+git remote add origin git@github.com:charlesNeedFocus/learngit.git
+#第一次将本地仓库推送当前master分支到GitHub,然后github上的repository
+git push -u origin master
+
+#之后推送master分支
+ git push origin master
+
+#分支管理
+#创建分支dev,并切换到该分支相当于执行了git branch dev ,git checkout dev两个指令
+git checkout -b dev
+#切换分支使用
+git checkout master/dev
+#合并分支，合并指定分支到当前分支
+git merge dev（将dev分支合并到当前分支）
+#查看分支
+git branch
+#分支切换，-c是创建的意思
+git switch -c dev
+
+#当两个分支都add 并且commit后合并就会出错，因为提交了不同的修改
+#使用git status查看 直接cat readme.txt就能看到不同
+#查看分支合并情况
+ git log --graph --pretty=oneline --abbrev-commit
+ #分支管理 --no-ff 合并分支不使用FAST-forward策略，会保留合并历史
+  git merge --no-ff -m "merge with no-ff" dev
+
+#存储工作现场,保存当前分支的现状（当前分支尚未提交） 
+git stash
+
+#查看stash内容
+git statsh list
+
+#恢复
+git stash pop(弹出后删除) git stash apply(恢复后不删除，需要手动 git stash drop)
+
+#强制删除
+ git branch -D feature-press
+ 
+ #查看远程分支 -v更详细的信息
+ git remote -v
+
+#推送分支
+git push origin master
+
+#协同开发，当多个人对远程同一个分支进行开发的时候，可能出现两个人先后上传相同文件名文件，会导致错误
+#step1、使用git branch --set-upstream-to=origin/<branch> dev
+#step2、git pull成功，但是合并有冲突，在本地解决冲突然后add commit 最后push到远程
+
+#本地与远程同步，成功直接push否则解决冲突后再push
+git pull
+
+#创建标签,创建v1.0标签（默认加到最新提交上）
+git tag v1.0
+#查询tag
+git tag
+
+#查询commit id
+git log --pretty=oneline --abbrev-commit
+
+#打标签
+git tag v0.1 commt_id
+
+#查看标签详情
+git show v0.9
+
+#删除标签
+git tag -d v0.0
+
+#将标签push到远程origin
+git push origin v0.1
+
+#push全部标签
+git push origin --tags
+
+#将push到远程的标签删除
+#1、step1:删除本地标签
+git tag -d v0.1
+#1、step2：远程删除
+git push origin :refs/tags/v0.1
+
+#删除远程连接
+git remote rm origin 
+
+#创建别名 如将status改为st
+git config --global alias.st status
+
+#删除别名
+git config --global alias.unstage 'reset HEAD'
+
+
+
+
